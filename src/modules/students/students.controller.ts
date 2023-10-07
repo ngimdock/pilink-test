@@ -1,17 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
   ParseUUIDPipe,
-  Post,
+  Patch,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
-import { CreateStudentDto } from './dtos';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StudentEntity } from './entities';
 import { STUDENTS } from 'src/common/constants';
+import { UpdateStudentDto } from './dtos';
 
 @Controller(STUDENTS)
 @ApiTags(STUDENTS)
@@ -19,20 +20,31 @@ export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status: HttpStatus.OK,
     type: StudentEntity,
   })
-  @Post()
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.create(createStudentDto);
+  @Get(':studentId')
+  findOneById(@Param('studentId', ParseUUIDPipe) studentId: string) {
+    return this.studentsService.findOneByIdOrThrow(studentId);
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
     type: StudentEntity,
   })
-  @Get('studentId')
-  findOneById(@Param('studentId', ParseUUIDPipe) studentId: string) {
-    return this.studentsService.findOneByIdOrThrow(studentId);
+  @Patch(':studentId')
+  update(
+    @Param('studentId', ParseUUIDPipe) studentId: string,
+    @Body() updateStudentDto: UpdateStudentDto,
+  ) {
+    return this.studentsService.update(studentId, updateStudentDto);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @Delete(':studentId')
+  async delete(@Param('studentId', ParseUUIDPipe) studentId: string) {
+    await this.studentsService.delete(studentId);
   }
 }

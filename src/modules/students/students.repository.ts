@@ -60,4 +60,10 @@ export class StudentsRepository {
       where: { id },
     });
   }
+
+  delete(studentId: string) {
+    return this.prisma.student.delete({
+      where: { id: studentId },
+    });
+  }
 }

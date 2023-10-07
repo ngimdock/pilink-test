@@ -59,4 +59,8 @@ export class StudentsService {
   findOneById(studentId: string) {
     return this.studentsRepository.findOneById(studentId);
   }
+
+  delete(studentId: string) {
+    return this.studentsRepository.delete(studentId);
+  }
 }
