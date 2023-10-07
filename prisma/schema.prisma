@@ -1,0 +1,65 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Student {
+  id String @id @default(uuid())
+  email String @unique
+  firstname String
+  lastname String
+
+  university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  universityId String
+
+  forums Forum[]
+}
+
+
+model University {
+  id String @id @default(uuid())
+  name String @unique
+  phone String @unique
+  fax String?
+
+  students Student[]
+  forums Forum[]
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String
+  description String ?
+  
+  comments Comment[]
+}
+
+model Comment {
+  id String @id @default(uuid())
+  message String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Forum {
+  id String @id @default(uuid())
+  name String @unique
+  image String @unique
+  descrition String ?
+
+  crator Student @relation(fields: [cratorId], references: [id])
+  cratorId String
+
+  university University @relation(fields: [universityId], references: [id])
+  universityId String
+}
