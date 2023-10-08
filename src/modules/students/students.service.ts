@@ -60,7 +60,13 @@ export class StudentsService {
     return this.studentsRepository.findOneById(studentId);
   }
 
-  delete(studentId: string) {
+  async delete(studentId: string) {
+    console.log({ studentId });
+
+    const student = await this.findOneById(studentId);
+
+    if (!student) throw new StudentNotFoundException();
+
     return this.studentsRepository.delete(studentId);
   }
 }
