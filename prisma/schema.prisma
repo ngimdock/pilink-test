@@ -51,7 +51,7 @@ model Post {
   forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
   forumId String
 
-  owner Student @relation(fields: [ownerId], references: [id], onDelete: SetDefault)
+  owner Student @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String
   
   comments Comment[]
@@ -70,7 +70,7 @@ model Comment {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
 
-  owner Student @relation(fields: [ownerId], references: [id], onDelete: SetDefault)
+  owner Student @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String
 
   createdAt DateTime @default(now())
@@ -85,7 +85,7 @@ model Forum {
   image String @unique
   descrition String ?
 
-  crator Student @relation(fields: [cratorId], references: [id], onDelete: SetDefault)
+  crator Student @relation(fields: [cratorId], references: [id], onDelete: Cascade)
   cratorId String
 
   university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
@@ -107,7 +107,7 @@ model StudentOnForum {
   forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
   forumId String
 
-  student Student @relation(fields: [studentId], references: [id], onDelete: SetDefault)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId String
 
   @@id([forumId, studentId])

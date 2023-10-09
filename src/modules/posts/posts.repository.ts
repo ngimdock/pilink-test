@@ -46,6 +46,7 @@ export class PostsRepository {
   findOneById(postId: string) {
     return this.prisma.post.findUnique({
       where: { id: postId },
+      include: { comments: { select: { id: true, message: true } } },
     });
   }
 

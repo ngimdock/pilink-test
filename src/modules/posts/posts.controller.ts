@@ -1,15 +1,17 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './dtos';
+import { CreatePostDto, UpdatePostDto } from './dtos';
 import { FORUMS, POSTS } from 'src/common/constants';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostEntity } from './entities';
@@ -45,5 +47,34 @@ export class PostsController {
     @Query() paginateDto: PaginateDto,
   ) {
     return this.postsService.findAll(forumId, paginateDto);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PostEntity,
+  })
+  @Get(`${POSTS}/:postId`)
+  findOneById(@Param('postId', ParseUUIDPipe) postId: string) {
+    return this.postsService.findOneByIdOrThrow(postId);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PostEntity,
+  })
+  @Patch(`${POSTS}/:postId`)
+  update(
+    @Param('postId', ParseUUIDPipe) postId: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postsService.update(postId, updatePostDto);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @Delete(`${POSTS}/:postId`)
+  async delete(@Param('postId', ParseUUIDPipe) postId: string) {
+    await this.postsService.delete(postId);
   }
 }
