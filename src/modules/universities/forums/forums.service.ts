@@ -43,7 +43,7 @@ export class ForumsService {
   async addMember(forumId: string, studentId: string) {
     await this.validateForumMember(forumId, studentId);
 
-    const studentIsMemberOfTheForum = await this.studentIsMemberOfThisForum(
+    const studentIsMemberOfTheForum = await this.findMemberInForum(
       forumId,
       studentId,
     );
@@ -57,7 +57,7 @@ export class ForumsService {
   async removeMember(forumId: string, studentId: string) {
     await this.validateForumMember(forumId, studentId);
 
-    const studentIsMemberOfTheForum = await this.studentIsMemberOfThisForum(
+    const studentIsMemberOfTheForum = await this.findMemberInForum(
       forumId,
       studentId,
     );
@@ -68,6 +68,16 @@ export class ForumsService {
     await this.forumsRepository.removeMember(forumId, studentId);
   }
 
+  async checkStudentIsMemberOfTheForum(forumId: string, studentId: string) {
+    const studentIsInTheForum = await this.findMemberInForum(
+      forumId,
+      studentId,
+    );
+
+    if (!studentIsInTheForum)
+      throw new StudentIsNotMemberOfThisForumException();
+  }
+
   private async validateForumMember(forumId: string, studentId: string) {
     await Promise.all([
       this.findOneByIdOrThrow(forumId),
@@ -75,7 +85,7 @@ export class ForumsService {
     ]);
   }
 
-  private studentIsMemberOfThisForum(forumId: string, studentId: string) {
+  private findMemberInForum(forumId: string, studentId: string) {
     return this.forumsRepository.findMemberInForum(forumId, studentId);
   }
 

@@ -73,7 +73,6 @@ export class ForumsRepository {
     return this.prisma.forum.findUnique({
       where: { id: forumId },
       include: {
-        crator: true,
         members: {
           select: {
             memberAt: true,

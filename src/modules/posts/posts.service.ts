@@ -25,6 +25,10 @@ export class PostsService {
       this.forumsService.findOneByIdOrThrow(forumId),
       this.studentsService.findOneByIdOrThrow(ownerId),
     ]);
+
+    const memberId = ownerId;
+
+    await this.forumsService.checkStudentIsMemberOfTheForum(forumId, memberId);
   }
 
   findAll(forumId: string, paginateDto: PaginateDto) {
