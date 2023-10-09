@@ -11,6 +11,8 @@ export class CreateForumDto {
   @IsNotEmpty()
   readonly cratorId: string;
 
+  readonly universityId: string;
+
   @IsString()
   @IsNotEmpty()
   @MinLength(3)

@@ -19,6 +19,9 @@ model Student {
   universityId String
 
   forums Forum[]
+
+  @@index([email, firstname, lastname])
+  @@map("students")
 }
 
 
@@ -30,6 +33,9 @@ model University {
 
   students Student[]
   forums Forum[]
+
+  @@index([name])
+  @@map("universities")
 }
 
 model Post {
@@ -38,6 +44,9 @@ model Post {
   description String ?
   
   comments Comment[]
+
+  @@index([title])
+  @@map("posts")
 }
 
 model Comment {
@@ -49,6 +58,8 @@ model Comment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("comments")
 }
 
 model Forum {
@@ -57,9 +68,12 @@ model Forum {
   image String @unique
   descrition String ?
 
-  crator Student @relation(fields: [cratorId], references: [id])
+  crator Student @relation(fields: [cratorId], references: [id], onDelete: SetDefault)
   cratorId String
 
-  university University @relation(fields: [universityId], references: [id])
+  university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
   universityId String
+
+  @@index([name])
+  @@map("forums")
 }

@@ -61,8 +61,6 @@ export class StudentsService {
   }
 
   async delete(studentId: string) {
-    console.log({ studentId });
-
     const student = await this.findOneById(studentId);
 
     if (!student) throw new StudentNotFoundException();

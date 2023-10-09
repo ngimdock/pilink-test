@@ -5,5 +5,5 @@ export class CreateCommentDto {
   @ApiProperty({ nullable: false })
   @IsString()
   @IsNotEmpty()
-  message: string;
+  readonly message: string;
 }

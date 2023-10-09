@@ -1,24 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateStudentDto {
-  @ApiProperty({ format: 'uuid' })
-  @IsUUID()
-  @IsNotEmpty()
-  universityId: string;
+  readonly universityId: string;
 
   @ApiProperty({ format: 'email' })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  readonly email: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  firstname: string;
+  readonly firstname: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  lastname: string;
+  readonly lastname: string;
 }

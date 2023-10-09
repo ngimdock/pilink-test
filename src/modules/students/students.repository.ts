@@ -25,7 +25,10 @@ export class StudentsRepository {
     { offset, limit }: PaginateDto,
   ): Promise<PaginateResponse<Student>> {
     const [total, students] = await Promise.all([
-      this.prisma.student.count(),
+      this.prisma.student.count({
+        where: { universityId },
+      }),
+
       this.prisma.student.findMany({
         where: { universityId },
         skip: offset,

@@ -6,11 +6,11 @@ import { Forum } from '@prisma/client';
 import { CreateForumDto } from './dtos';
 
 @Injectable()
-export class ForumRepository {
+export class ForumsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(universityId: string, dto: CreateForumDto) {
-    const { cratorId, ...forumData } = dto;
+  create(dto: CreateForumDto) {
+    const { cratorId, universityId, ...forumData } = dto;
     return this.prisma.forum.create({
       data: {
         ...forumData,
@@ -29,7 +29,9 @@ export class ForumRepository {
     { offset, limit }: PaginateDto,
   ): Promise<PaginateResponse<Forum>> {
     const [total, forums] = await Promise.all([
-      this.prisma.forum.count(),
+      this.prisma.forum.count({
+        where: { universityId },
+      }),
       this.prisma.forum.findMany({
         where: { universityId },
         skip: offset,
@@ -47,6 +49,12 @@ export class ForumRepository {
   findOneById(forumId: string) {
     return this.prisma.forum.findUnique({
       where: { id: forumId },
+    });
+  }
+
+  findOneByName(name: string) {
+    return this.prisma.forum.findUnique({
+      where: { name },
     });
   }
 }

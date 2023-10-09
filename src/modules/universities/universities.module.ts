@@ -4,10 +4,8 @@ import { UniversitiesService } from './universities.service';
 import { UniversitiesRepository } from './universities.repository';
 import { DEFAULT_UNIVERSITIES } from './constants';
 import { ForumsModule } from './forums/forums.module';
-import { StudentsModule } from '../students/students.module';
-
 @Module({
-  imports: [ForumsModule, forwardRef(() => StudentsModule)],
+  imports: [forwardRef(() => ForumsModule)],
   controllers: [UniversitiesController],
   providers: [UniversitiesService, UniversitiesRepository],
   exports: [UniversitiesService],
