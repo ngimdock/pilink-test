@@ -45,4 +45,13 @@ export class ForumsController {
   ) {
     return this.forumsService.findAll(universityId, paginateDto);
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: ForumEntity,
+  })
+  @Get(`${FORUMS}/:forumId`)
+  findOneById(@Param('forumId', ParseUUIDPipe) forumId: string) {
+    return this.forumsService.findOneByIdOrThrow(forumId);
+  }
 }

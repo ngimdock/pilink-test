@@ -45,7 +45,7 @@ export class ForumsService {
   }
 
   async findOneByIdOrThrow(forumId: string) {
-    const forum = this.findOneById(forumId);
+    const forum = await this.findOneById(forumId);
 
     if (!forum) throw new ForumNotFoundException();
 

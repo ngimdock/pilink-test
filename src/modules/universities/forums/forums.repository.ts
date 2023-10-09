@@ -44,6 +44,21 @@ export class ForumsRepository {
   findOneById(forumId: string) {
     return this.prisma.forum.findUnique({
       where: { id: forumId },
+      include: {
+        crator: true,
+        members: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                email: true,
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 

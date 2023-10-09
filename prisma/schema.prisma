@@ -18,10 +18,10 @@ model Student {
   university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
   universityId String
 
-  forums Forum[]
   posts Post[]
   comments Comment[]
-
+  forumsCreated Forum[]
+  forumsMember StudentOnForum[]
 
   @@index([email, firstname, lastname])
   @@map("students")
@@ -35,6 +35,9 @@ model University {
 
   students Student[]
   forums Forum[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([name])
   @@map("universities")
@@ -89,7 +92,25 @@ model Forum {
   universityId String
 
   posts Post[]
+  members StudentOnForum[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([name])
   @@map("forums")
+}
+
+model StudentOnForum {
+  memberAt DateTime @default(now())
+
+  forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  forumId String
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: SetDefault)
+  studentId String
+
+  @@id([forumId, studentId])
+  
+  @@map("StudentOnForum")
 }
