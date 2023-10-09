@@ -20,6 +20,34 @@ export class ForumsRepository {
     });
   }
 
+  async addMember(forumId: string, studentId: string) {
+    await this.prisma.studentOnForum.create({
+      data: {
+        forumId,
+        studentId,
+      },
+    });
+  }
+
+  async removeMember(forumId: string, studentId: string) {
+    await this.prisma.studentOnForum.delete({
+      where: {
+        forumId_studentId: {
+          forumId,
+          studentId,
+        },
+      },
+    });
+  }
+
+  findMemberInForum(forumId: string, studentId: string) {
+    return this.prisma.studentOnForum.findUnique({
+      where: {
+        forumId_studentId: { forumId, studentId },
+      },
+    });
+  }
+
   async findAll(
     universityId: string,
     { offset, limit }: PaginateDto,
@@ -48,6 +76,7 @@ export class ForumsRepository {
         crator: true,
         members: {
           select: {
+            memberAt: true,
             student: {
               select: {
                 id: true,

@@ -3,6 +3,8 @@ import { ForumsRepository } from './forums.repository';
 import {
   ForumAlreadyExistsException,
   ForumNotFoundException,
+  StudentAlreadyMemberOfThiForumException,
+  StudentIsNotMemberOfThisForumException,
 } from './exceptions';
 import { CreateForumDto } from './dtos';
 import { StudentsService } from 'src/modules/students/students.service';
@@ -20,8 +22,6 @@ export class ForumsService {
   async create(createForumDto: CreateForumDto) {
     await this.validateForum(createForumDto);
 
-    // console.log({ createForumDto });
-
     return this.forumsRepository.create(createForumDto);
   }
 
@@ -38,6 +38,45 @@ export class ForumsService {
     const forumExists = await this.findOneByName(name);
 
     if (forumExists) throw new ForumAlreadyExistsException();
+  }
+
+  async addMember(forumId: string, studentId: string) {
+    await this.validateForumMember(forumId, studentId);
+
+    const studentIsAlreadyMember = await this.studentIsMemberOfThisForum(
+      forumId,
+      studentId,
+    );
+
+    if (studentIsAlreadyMember)
+      throw new StudentAlreadyMemberOfThiForumException();
+
+    await this.forumsRepository.addMember(forumId, studentId);
+  }
+
+  async removeMember(forumId: string, studentId: string) {
+    await this.validateForumMember(forumId, studentId);
+
+    const studentMemberOfTheForum = await this.studentIsMemberOfThisForum(
+      forumId,
+      studentId,
+    );
+
+    if (!studentMemberOfTheForum)
+      throw new StudentIsNotMemberOfThisForumException();
+
+    await this.forumsRepository.removeMember(forumId, studentId);
+  }
+
+  private async validateForumMember(forumId: string, studentId: string) {
+    await Promise.all([
+      this.findOneByIdOrThrow(forumId),
+      this.studentsService.findOneByIdOrThrow(studentId),
+    ]);
+  }
+
+  private studentIsMemberOfThisForum(forumId: string, studentId: string) {
+    return this.forumsRepository.findMemberInForum(forumId, studentId);
   }
 
   findAll(universityId: string, paginateDto: PaginateDto) {
