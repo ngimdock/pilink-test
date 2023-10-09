@@ -9,23 +9,25 @@ import { Comment } from '@prisma/client';
 export class CommentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  // create(postId: string, dto: CreateCommentDto) {
-  //   return this.prisma.comment.create({
-  //     data: {
-  //       ...dto,
-  //       post: {
-  //         connect: { id: postId },
-  //       },
-  //     },
-  //   });
-  // }
+  create(dto: CreateCommentDto) {
+    const { postId, ownerId, ...commentData } = dto;
+
+    return this.prisma.comment.create({
+      data: {
+        ...commentData,
+        post: { connect: { id: postId } },
+        owner: { connect: { id: ownerId } },
+      },
+    });
+  }
 
   async findAll(
     postId: string,
     { offset, limit }: PaginateDto,
   ): Promise<PaginateResponse<Comment>> {
     const [total, comments] = await Promise.all([
-      this.prisma.comment.count(),
+      this.prisma.comment.count({ where: { postId } }),
+
       this.prisma.comment.findMany({
         where: { postId },
         skip: offset,
