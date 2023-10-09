@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -12,7 +14,7 @@ import { CommentsService } from './comments.service';
 import { COMMENTS, POSTS } from 'src/common/constants';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentEntity } from './entities';
-import { CreateCommentDto } from './dtos';
+import { CreateCommentDto, UpdateCommentDto } from './dtos';
 import { PaginateDto } from 'src/common/dtos';
 import { PaginateResponse } from 'src/common/types';
 
@@ -52,5 +54,24 @@ export class CommentsController {
   @Get(`${COMMENTS}/:commentId`)
   findOneById(@Param('commentId', ParseUUIDPipe) commentId: string) {
     return this.commentsService.findOneByIdOrThrow(commentId);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @Patch(`${COMMENTS}/:commentId`)
+  async update(
+    @Param('commentId', ParseUUIDPipe) commentId: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    await this.commentsService.update(commentId, updateCommentDto);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @Delete(`${COMMENTS}/:commentId`)
+  async delete(@Param('commentId', ParseUUIDPipe) commentId: string) {
+    await this.commentsService.delete(commentId);
   }
 }

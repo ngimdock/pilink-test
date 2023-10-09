@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommentsRepository } from './comments.repository';
-import { CreateCommentDto } from './dtos';
+import { CreateCommentDto, UpdateCommentDto } from './dtos';
 import { PostsService } from '../posts.service';
 import { StudentsService } from 'src/modules/students/students.service';
 import { ForumsService } from 'src/modules/universities/forums/forums.service';
@@ -52,5 +52,17 @@ export class CommentsService {
     if (!comment) throw new CommentNotFoundException();
 
     return comment;
+  }
+
+  async update(commentId: string, updateCommentDto: UpdateCommentDto) {
+    await this.findOneByIdOrThrow(commentId);
+
+    return this.commentsRepository.update(commentId, updateCommentDto);
+  }
+
+  async delete(commentId: string) {
+    await this.findOneByIdOrThrow(commentId);
+
+    return this.commentsRepository.delete(commentId);
   }
 }
