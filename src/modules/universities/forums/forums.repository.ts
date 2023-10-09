@@ -14,12 +14,8 @@ export class ForumsRepository {
     return this.prisma.forum.create({
       data: {
         ...forumData,
-        crator: {
-          connect: { id: cratorId },
-        },
-        university: {
-          connect: { id: universityId },
-        },
+        crator: { connect: { id: cratorId } },
+        university: { connect: { id: universityId } },
       },
     });
   }
@@ -29,9 +25,8 @@ export class ForumsRepository {
     { offset, limit }: PaginateDto,
   ): Promise<PaginateResponse<Forum>> {
     const [total, forums] = await Promise.all([
-      this.prisma.forum.count({
-        where: { universityId },
-      }),
+      this.prisma.forum.count({ where: { universityId } }),
+
       this.prisma.forum.findMany({
         where: { universityId },
         skip: offset,

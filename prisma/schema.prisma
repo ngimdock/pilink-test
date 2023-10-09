@@ -19,11 +19,13 @@ model Student {
   universityId String
 
   forums Forum[]
+  posts Post[]
+  comments Comment[]
+
 
   @@index([email, firstname, lastname])
   @@map("students")
 }
-
 
 model University {
   id String @id @default(uuid())
@@ -42,8 +44,17 @@ model Post {
   id String @id @default(uuid())
   title String
   description String ?
+
+  forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  forumId String
+
+  owner Student @relation(fields: [ownerId], references: [id], onDelete: SetDefault)
+  ownerId String
   
   comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([title])
   @@map("posts")
@@ -55,6 +66,9 @@ model Comment {
 
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
+
+  owner Student @relation(fields: [ownerId], references: [id], onDelete: SetDefault)
+  ownerId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,6 +87,8 @@ model Forum {
 
   university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
   universityId String
+
+  posts Post[]
 
   @@index([name])
   @@map("forums")

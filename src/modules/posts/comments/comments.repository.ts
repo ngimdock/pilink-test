@@ -9,16 +9,16 @@ import { Comment } from '@prisma/client';
 export class CommentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(postId: string, dto: CreateCommentDto) {
-    return this.prisma.comment.create({
-      data: {
-        ...dto,
-        post: {
-          connect: { id: postId },
-        },
-      },
-    });
-  }
+  // create(postId: string, dto: CreateCommentDto) {
+  //   return this.prisma.comment.create({
+  //     data: {
+  //       ...dto,
+  //       post: {
+  //         connect: { id: postId },
+  //       },
+  //     },
+  //   });
+  // }
 
   async findAll(
     postId: string,

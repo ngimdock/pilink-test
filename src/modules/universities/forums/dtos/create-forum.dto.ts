@@ -7,11 +7,11 @@ import {
 } from 'class-validator';
 
 export class CreateForumDto {
+  readonly universityId: string;
+
   @IsUUID()
   @IsNotEmpty()
   readonly cratorId: string;
-
-  readonly universityId: string;
 
   @IsString()
   @IsNotEmpty()
