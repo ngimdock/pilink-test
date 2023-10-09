@@ -43,12 +43,12 @@ export class ForumsService {
   async addMember(forumId: string, studentId: string) {
     await this.validateForumMember(forumId, studentId);
 
-    const studentIsAlreadyMember = await this.studentIsMemberOfThisForum(
+    const studentIsMemberOfTheForum = await this.studentIsMemberOfThisForum(
       forumId,
       studentId,
     );
 
-    if (studentIsAlreadyMember)
+    if (studentIsMemberOfTheForum)
       throw new StudentAlreadyMemberOfThiForumException();
 
     await this.forumsRepository.addMember(forumId, studentId);
@@ -57,12 +57,12 @@ export class ForumsService {
   async removeMember(forumId: string, studentId: string) {
     await this.validateForumMember(forumId, studentId);
 
-    const studentMemberOfTheForum = await this.studentIsMemberOfThisForum(
+    const studentIsMemberOfTheForum = await this.studentIsMemberOfThisForum(
       forumId,
       studentId,
     );
 
-    if (!studentMemberOfTheForum)
+    if (!studentIsMemberOfTheForum)
       throw new StudentIsNotMemberOfThisForumException();
 
     await this.forumsRepository.removeMember(forumId, studentId);
