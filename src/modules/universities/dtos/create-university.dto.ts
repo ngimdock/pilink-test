@@ -12,16 +12,16 @@ export class CreateUniversityDto {
   @IsNotEmpty()
   @MinLength(3)
   @Transform(({ value }) => value.trim().toLowerCase())
-  name: string;
+  readonly name: string;
 
   @IsString()
   @IsNotEmpty()
   @Length(9)
   @Transform(({ value }) => value.trim())
-  phone: string;
+  readonly phone: string;
 
   @IsString()
   @IsOptional()
   @Transform(({ value }) => value.trim())
-  fax?: string;
+  readonly fax?: string;
 }

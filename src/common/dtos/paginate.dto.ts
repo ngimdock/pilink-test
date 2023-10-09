@@ -15,7 +15,7 @@ export class PaginateDto {
   @IsNotEmpty()
   @Min(MIN_OFFSET_VALUE)
   @Type(() => Number)
-  offset: number = DEFAULT_OFFSET_VALUE;
+  readonly offset: number = DEFAULT_OFFSET_VALUE;
 
   @ApiProperty({ example: 10, default: DEFAULT_LIMIT_VALUE })
   @IsNumber()
@@ -23,5 +23,5 @@ export class PaginateDto {
   @Min(MIN_LIMIT_VALUE)
   @Max(MAX_LIMIT_VALUE)
   @Type(() => Number)
-  limit: number = DEFAULT_LIMIT_VALUE;
+  readonly limit: number = DEFAULT_LIMIT_VALUE;
 }
