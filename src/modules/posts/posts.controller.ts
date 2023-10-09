@@ -18,8 +18,6 @@ import { PostEntity } from './entities';
 import { PaginateResponse } from 'src/common/types';
 import { PaginateDto } from 'src/common/dtos';
 
-const FORUM_ID = 'forumId';
-
 @Controller()
 @ApiTags(POSTS)
 export class PostsController {
@@ -29,9 +27,9 @@ export class PostsController {
     status: HttpStatus.CREATED,
     type: PostEntity,
   })
-  @Post(`${FORUMS}/:${FORUM_ID}/${POSTS}`)
+  @Post(`${FORUMS}/:forumId/${POSTS}`)
   create(
-    @Param(FORUM_ID, ParseUUIDPipe) forumId: string,
+    @Param('forumId', ParseUUIDPipe) forumId: string,
     @Body() createPostDto: CreatePostDto,
   ) {
     return this.postsService.create({ ...createPostDto, forumId });
@@ -41,9 +39,9 @@ export class PostsController {
     status: HttpStatus.OK,
     type: PaginateResponse,
   })
-  @Get(`${FORUMS}/:${FORUM_ID}/${POSTS}`)
+  @Get(`${FORUMS}/:forumId/${POSTS}`)
   findAll(
-    @Param(FORUM_ID, ParseUUIDPipe) forumId: string,
+    @Param('forumId', ParseUUIDPipe) forumId: string,
     @Query() paginateDto: PaginateDto,
   ) {
     return this.postsService.findAll(forumId, paginateDto);

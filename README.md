@@ -2,7 +2,7 @@
 
 ## Les fonctionnalités
 
-- Création dynamique de 2 universités au lancement du projet
+- Création dynamique de 2 universités au lancement du projet (voir UniversitiesModule)
 - CRUD des étudiants dans une université.
 - CRUD des forums dans une université
 - Ajouter et retirer un étudiant dans un forum
